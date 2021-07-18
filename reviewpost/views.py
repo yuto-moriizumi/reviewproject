@@ -39,3 +39,8 @@ def loginview(request):
 def listview(request):
     object_list = ReviewModel.objects.all()
     return render(request, "list.html", {"object_list": object_list})
+
+
+def detailview(request, pk):
+    object = ReviewModel.objects.get(pk=pk)
+    return render(request, "detail.html", {"object": object})
