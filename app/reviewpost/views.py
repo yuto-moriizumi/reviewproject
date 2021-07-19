@@ -11,19 +11,17 @@ from django.contrib.auth.decorators import login_required
 
 
 def signupview(request):
-
-    if request.method == "POST":
-        print("POST method")
-        username_data = request.POST.get("username_data")
-        password_data = request.POST.get("password_data")
-        try:
-            user = User.objects.create_user(
-                username_data, "", password_data)
-        except IntegrityError:
-            return render(request, "signup.html", {"error": "このユーザは既に登録されています   "})
-    else:
-        print(User.objects.all())
-    return render(request, "signup.html", {})
+    if request.method != "POST":
+        return render(request, "signup.html", {})
+    print("POST method")
+    username_data = request.POST.get("username_data")
+    password_data = request.POST.get("password_data")
+    try:
+        user = User.objects.create_user(
+            username_data, "", password_data)
+        return render(request, "login.html", {})
+    except IntegrityError:
+        return render(request, "signup.html", {"error": "このユーザは既に登録されています   "})
 
 
 def loginview(request):
@@ -55,7 +53,7 @@ def detailview(request, pk):
 class CreateClass(CreateView):
     template_name = "create.html"
     model = "ReviewModel"
-    fields = ["title", "content", "author", "images", "evaluation"]
+    fields = ("title", "content", "author", "images", "evaluation")
     success_url = reverse_lazy("list")
 
 
